@@ -208,3 +208,10 @@ Wait for consent; never auto-create ADRs. Group related decisions (stacks, authe
 
 ## Code Standards
 See `.specify/memory/constitution.md` for code quality, testing, performance, security, and architecture principles.
+
+## Active Technologies
+- TypeScript 5.3+ (for Docusaurus), Python 3.11+ (for FastAPI chatbot) + Docusaurus 3.9, FastAPI, Qdrant, Cohere, Better Auth, Tailwind CSS (001-ai-robotics-textbook)
+- Qdrant vector database for RAG chatbot, static file storage for textbook content (001-ai-robotics-textbook)
+
+## Recent Changes
+- 001-ai-robotics-textbook: Added TypeScript 5.3+ (for Docusaurus), Python 3.11+ (for FastAPI chatbot) + Docusaurus 3.9, FastAPI, Qdrant, Cohere, Better Auth, Tailwind CSS

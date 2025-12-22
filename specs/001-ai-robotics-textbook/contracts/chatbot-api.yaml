@@ -1,0 +1,289 @@
+openapi: 3.0.0
+info:
+  title: RAG Chatbot API for Physical AI & Humanoid Robotics Textbook
+  description: API for the Retrieval Augmented Generation chatbot that answers questions about the textbook content
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8000
+    description: Development server
+  - url: https://api.textbook-domain.com
+    description: Production server
+
+paths:
+  /chat/query:
+    post:
+      summary: Submit a question to the RAG chatbot
+      description: Process user question against textbook content and return an answer with confidence score
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatQueryRequest'
+      responses:
+        '200':
+          description: Successful response with answer and metadata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatQueryResponse'
+        '400':
+          description: Invalid request format or missing required fields
+        '500':
+          description: Internal server error during processing
+      security:
+        - bearerAuth: []
+
+  /chat/history/{user_id}:
+    get:
+      summary: Get chat history for a user
+      description: Retrieve the conversation history for a specific user
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user whose chat history is requested
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          description: Maximum number of recent conversations to return (default: 10)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+      responses:
+        '200':
+          description: List of chat history entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ChatHistoryEntry'
+        '404':
+          description: User not found
+        '500':
+          description: Internal server error
+
+  /content/embed:
+    post:
+      summary: Embed textbook content
+      description: Process and store textbook content in the vector database for RAG retrieval
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContentEmbedRequest'
+      responses:
+        '200':
+          description: Content successfully embedded and stored
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentEmbedResponse'
+        '400':
+          description: Invalid content format or missing required fields
+        '500':
+          description: Internal server error during embedding
+
+  /health:
+    get:
+      summary: Health check endpoint
+      description: Check if the chatbot service is running and healthy
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    ChatQueryRequest:
+      type: object
+      required:
+        - query
+        - user_id
+      properties:
+        query:
+          type: string
+          description: The question or query from the user
+          example: "Explain how ROS2 nodes communicate with each other"
+        user_id:
+          type: string
+          description: The ID of the user making the query
+          example: "user-12345"
+        context:
+          type: object
+          description: Additional context about the user's current location in the textbook
+          properties:
+            module:
+              type: integer
+              description: Current module number
+              example: 1
+            chapter:
+              type: integer
+              description: Current chapter number
+              example: 3
+
+    ChatQueryResponse:
+      type: object
+      required:
+        - answer
+        - confidence
+        - sources
+      properties:
+        answer:
+          type: string
+          description: The chatbot's answer to the user's query
+          example: "ROS2 nodes communicate through a publish-subscribe model using topics..."
+        confidence:
+          type: number
+          description: Confidence score of the answer (0.0 to 1.0)
+          format: float
+          minimum: 0.0
+          maximum: 1.0
+          example: 0.95
+        sources:
+          type: array
+          description: List of textbook sections that contributed to the answer
+          items:
+            type: string
+          example: ["module-1/chapter-3", "module-1/chapter-4"]
+        query_id:
+          type: string
+          description: Unique identifier for this query
+          example: "query-67890"
+
+    ChatHistoryEntry:
+      type: object
+      required:
+        - query_id
+        - query
+        - response
+        - timestamp
+      properties:
+        query_id:
+          type: string
+          description: Unique identifier for the query
+          example: "query-67890"
+        query:
+          type: string
+          description: The original user query
+          example: "How do I create a ROS2 service?"
+        response:
+          type: string
+          description: The chatbot's response
+          example: "To create a ROS2 service, you need to define a service interface..."
+        timestamp:
+          type: string
+          format: date-time
+          description: When the query was made
+          example: "2025-12-22T10:30:00Z"
+        confidence:
+          type: number
+          format: float
+          description: Confidence score of the response
+          minimum: 0.0
+          maximum: 1.0
+          example: 0.89
+
+    ContentEmbedRequest:
+      type: object
+      required:
+        - content_id
+        - content
+        - metadata
+      properties:
+        content_id:
+          type: string
+          description: Unique identifier for the content being embedded
+          example: "module-1/chapter-3"
+        content:
+          type: string
+          description: The actual content text to be embedded
+          example: "ROS2 nodes are the fundamental building blocks of a ROS system..."
+        metadata:
+          type: object
+          description: Metadata associated with the content
+          properties:
+            module:
+              type: integer
+              description: Module number
+              example: 1
+            chapter:
+              type: integer
+              description: Chapter number
+              example: 3
+            title:
+              type: string
+              description: Title of the content
+              example: "Understanding ROS2 Nodes"
+
+    ContentEmbedResponse:
+      type: object
+      required:
+        - success
+        - content_id
+      properties:
+        success:
+          type: boolean
+          description: Whether the embedding was successful
+          example: true
+        content_id:
+          type: string
+          description: The ID of the content that was embedded
+          example: "module-1/chapter-3"
+        chunks_embedded:
+          type: integer
+          description: Number of content chunks that were embedded
+          example: 12
+
+    HealthResponse:
+      type: object
+      required:
+        - status
+        - timestamp
+      properties:
+        status:
+          type: string
+          description: Health status of the service
+          enum: [healthy, degraded, unhealthy]
+          example: "healthy"
+        timestamp:
+          type: string
+          format: date-time
+          description: When the health check was performed
+          example: "2025-12-22T10:30:00Z"
+        details:
+          type: object
+          description: Additional health details
+          properties:
+            version:
+              type: string
+              description: Current version of the service
+              example: "1.0.0"
+            dependencies:
+              type: object
+              description: Status of dependent services
+              properties:
+                qdrant:
+                  type: string
+                  enum: [connected, disconnected]
+                  example: "connected"
+                cohere:
+                  type: string
+                  enum: [connected, disconnected]
+                  example: "connected"

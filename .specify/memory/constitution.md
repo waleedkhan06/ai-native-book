@@ -1,55 +1,64 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!-- Sync Impact Report:
+Version change: None (initial creation) → 1.0.0
+Modified principles:
+  - PROJECT_NAME: "[PROJECT_NAME]" → "Physical AI & Humanoid Robotics"
+  - PRINCIPLE_1: "[PRINCIPLE_1_NAME]" → "Educational excellence with runnable ROS2/Gazebo/Isaac examples on Ubuntu 22.04."
+  - PRINCIPLE_2: "[PRINCIPLE_2_NAME]" → "Production code: PEP8, type hints, tested."
+  - PRINCIPLE_3: "[PRINCIPLE_3_NAME]" → "Docusaurus 3.9 + GitHub Pages."
+  - PRINCIPLE_4: "[PRINCIPLE_4_NAME]" → "RAG chatbot with Cohere+Qdrant."
+  - PRINCIPLE_5: "[PRINCIPLE_5_NAME]" → "Better Auth signup with background questions."
+  - PRINCIPLE_6: "[PRINCIPLE_6_NAME]" → "Chapter personalization based on user expertise."
+  - PRINCIPLE_7: "Added" → "Urdu translation support."
+Added sections:
+  - Acceptance Criteria
+Removed sections: None
+Templates requiring updates:
+  - .specify/templates/plan-template.md: ⚠ pending
+  - .specify/templates/spec-template.md: ⚠ pending
+  - .specify/templates/tasks-template.md: ⚠ pending
+  - .specify/templates/commands/*.md: ⚠ pending
+  - README.md: ⚠ pending
+  - docs/quickstart.md: ⚠ pending
+Follow-up TODOs: None
+-->
+# Physical AI & Humanoid Robotics Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Educational Excellence
+All examples MUST be runnable with ROS2/Gazebo/Isaac on Ubuntu 22.04, ensuring practical and hands-on learning for users.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. Production Code Standards
+All code MUST adhere to PEP8 guidelines, include comprehensive type hints, and be thoroughly tested in Docker containers to maintain high quality and reliability.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Documentation with Docusaurus and GitHub Pages
+The textbook MUST be published using Docusaurus 3.9 and deployed to GitHub Pages via CI/CD pipeline for accessible and version-controlled documentation.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. RAG Chatbot Integration
+A Retrieval Augmented Generation (RAG) chatbot MUST be integrated using FastAPI, powered by Cohere and Qdrant, with a target accuracy of >90%.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### V. Enhanced Authentication and Onboarding
+The authentication signup process MUST include background questions to better understand user needs and tailor their experience.
 
-### [PRINCIPLE_6_NAME]
+### VI. Personalized Chapter Content
+Chapters MUST offer personalization based on the user's expertise level, providing a customized learning path.
 
+### VII. Urdu Translation Support
+The entire textbook content MUST support Urdu translation to cater to a broader audience.
 
-[PRINCIPLE__DESCRIPTION]
+## Acceptance Criteria
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+### I. Code Functionality
+All provided code examples MUST run successfully on a fresh Ubuntu 22.04 installation without errors.
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+### II. Web Performance
+The Docusaurus website MUST achieve a Lighthouse performance score of >95.
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
-
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+### III. Chatbot Accuracy
+The integrated RAG chatbot MUST demonstrate >90% accuracy in its responses.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+This constitution supersedes all other project practices. Amendments require thorough documentation, explicit approval from stakeholders, and a clear migration plan for any significant changes. All pull requests and code reviews MUST verify compliance with these principles. Complexity introduced into the project MUST be justified clearly against these principles.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2025-12-21 | **Last Amended**: 2025-12-21

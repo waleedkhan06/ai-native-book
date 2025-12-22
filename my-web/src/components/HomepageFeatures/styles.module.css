@@ -1,0 +1,68 @@
+.features {
+  display: flex;
+  align-items: center;
+  padding: 4rem 0;
+  width: 100%;
+  background: transparent;
+}
+
+/* Glass effect feature cards */
+.feature-card {
+  background: rgba(30, 30, 46, 0.3); /* Semi-transparent dark background */
+  backdrop-filter: blur(10px); /* Glass effect */
+  -webkit-backdrop-filter: blur(10px); /* Safari support */
+  border: 1px solid rgba(139, 92, 246, 0.2); /* Purple border with low opacity */
+  border-radius: 16px; /* Rounded corners */
+  padding: 2rem 1.5rem;
+  height: 100%;
+  transition: all 0.3s ease;
+  color: white;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.feature-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 40px rgba(139, 92, 246, 0.3); /* Purple glow on hover */
+  border: 1px solid rgba(167, 139, 250, 0.4); /* Purple border on hover */
+  background: rgba(40, 40, 60, 0.4); /* Slightly lighter on hover */
+}
+
+.feature-icon {
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60px;
+}
+
+/* Responsive adjustments for feature cards */
+@media screen and (max-width: 996px) {
+  .col--3 {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+
+  .feature-card {
+    padding: 1.5rem 1rem;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .col--3 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  .features {
+    padding: 2rem 0;
+  }
+
+  .feature-card {
+    padding: 1.5rem;
+  }
+
+  .feature-icon {
+    margin-bottom: 1rem;
+    height: 50px;
+  }
+}

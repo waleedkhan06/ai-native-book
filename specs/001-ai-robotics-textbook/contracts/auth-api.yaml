@@ -1,0 +1,604 @@
+openapi: 3.0.0
+info:
+  title: Authentication API for Physical AI & Humanoid Robotics Textbook
+  description: API for user authentication and personalization settings management
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000  # Assuming Docusaurus serves auth endpoints
+    description: Development server
+  - url: https://textbook-domain.com
+    description: Production server
+
+paths:
+  /api/auth/register:
+    post:
+      summary: Register a new user
+      description: Create a new user account with background questionnaire responses
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegistrationRequest'
+      responses:
+        '201':
+          description: User successfully registered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserRegistrationResponse'
+        '400':
+          description: Invalid registration data or missing required fields
+        '409':
+          description: User with this email already exists
+
+  /api/auth/login:
+    post:
+      summary: User login
+      description: Authenticate user and return session token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: User successfully authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '400':
+          description: Invalid login credentials
+        '401':
+          description: Authentication failed
+
+  /api/auth/profile:
+    get:
+      summary: Get user profile
+      description: Retrieve current user's profile information
+      responses:
+        '200':
+          description: User profile retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfileResponse'
+        '401':
+          description: Authentication required
+      security:
+        - bearerAuth: []
+
+    put:
+      summary: Update user profile
+      description: Update current user's profile information
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserProfileUpdateRequest'
+      responses:
+        '200':
+          description: User profile updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfileResponse'
+        '400':
+          description: Invalid profile data
+        '401':
+          description: Authentication required
+      security:
+        - bearerAuth: []
+
+  /api/auth/personalization:
+    get:
+      summary: Get personalization settings
+      description: Retrieve current user's personalization settings and learning path
+      responses:
+        '200':
+          description: Personalization settings retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonalizationResponse'
+        '401':
+          description: Authentication required
+      security:
+        - bearerAuth: []
+
+    put:
+      summary: Update personalization settings
+      description: Update current user's personalization settings and learning preferences
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonalizationUpdateRequest'
+      responses:
+        '200':
+          description: Personalization settings updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonalizationResponse'
+        '400':
+          description: Invalid personalization data
+        '401':
+          description: Authentication required
+      security:
+        - bearerAuth: []
+
+  /api/auth/progress:
+    get:
+      summary: Get learning progress
+      description: Retrieve current user's progress through the textbook modules
+      responses:
+        '200':
+          description: Learning progress retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LearningProgressResponse'
+        '401':
+          description: Authentication required
+      security:
+        - bearerAuth: []
+
+    post:
+      summary: Update learning progress
+      description: Update current user's progress for a specific chapter or module
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LearningProgressUpdateRequest'
+      responses:
+        '200':
+          description: Learning progress updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LearningProgressResponse'
+        '400':
+          description: Invalid progress data
+        '401':
+          description: Authentication required
+      security:
+        - bearerAuth: []
+
+  /api/auth/preferences:
+    get:
+      summary: Get user preferences
+      description: Retrieve current user's content preferences (language, etc.)
+      responses:
+        '200':
+          description: User preferences retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPreferencesResponse'
+        '401':
+          description: Authentication required
+      security:
+        - bearerAuth: []
+
+    put:
+      summary: Update user preferences
+      description: Update current user's content preferences
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPreferencesUpdateRequest'
+      responses:
+        '200':
+          description: User preferences updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPreferencesResponse'
+        '400':
+          description: Invalid preference data
+        '401':
+          description: Authentication required
+      security:
+        - bearerAuth: []
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    UserRegistrationRequest:
+      type: object
+      required:
+        - email
+        - password
+        - name
+        - backgroundQuestions
+      properties:
+        email:
+          type: string
+          format: email
+          description: User's email address
+          example: "student@example.com"
+        password:
+          type: string
+          minLength: 8
+          description: User's password
+          example: "SecurePassword123"
+        name:
+          type: string
+          description: User's full name
+          example: "John Doe"
+        backgroundQuestions:
+          type: object
+          description: Responses to the 5 background questions
+          properties:
+            experience_level:
+              type: string
+              enum: [beginner, intermediate, advanced]
+              description: User's technical experience level
+              example: "beginner"
+            hardware_background:
+              type: string
+              description: User's hardware experience
+              example: "I have worked with Arduino and Raspberry Pi"
+            software_background:
+              type: string
+              description: User's software experience
+              example: "I am proficient in Python and C++"
+            learning_goals:
+              type: string
+              description: What the user wants to learn
+              example: "I want to build autonomous robots"
+            preferred_pace:
+              type: string
+              enum: [fast, moderate, slow]
+              description: User's preferred learning pace
+              example: "moderate"
+
+    UserRegistrationResponse:
+      type: object
+      required:
+        - user_id
+        - email
+        - created_at
+      properties:
+        user_id:
+          type: string
+          description: Unique identifier for the created user
+          example: "user-12345"
+        email:
+          type: string
+          format: email
+          description: User's email address
+          example: "student@example.com"
+        name:
+          type: string
+          description: User's name
+          example: "John Doe"
+        created_at:
+          type: string
+          format: date-time
+          description: When the account was created
+          example: "2025-12-22T10:30:00Z"
+        personalization_settings:
+          $ref: '#/components/schemas/PersonalizationResponse'
+
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          description: User's email address
+          example: "student@example.com"
+        password:
+          type: string
+          description: User's password
+          example: "SecurePassword123"
+
+    LoginResponse:
+      type: object
+      required:
+        - access_token
+        - token_type
+        - user
+      properties:
+        access_token:
+          type: string
+          description: JWT access token
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        token_type:
+          type: string
+          description: Type of token (always "bearer")
+          example: "bearer"
+        user:
+          $ref: '#/components/schemas/UserProfileResponse'
+
+    UserProfileResponse:
+      type: object
+      required:
+        - user_id
+        - email
+        - name
+        - created_at
+      properties:
+        user_id:
+          type: string
+          description: Unique identifier for the user
+          example: "user-12345"
+        email:
+          type: string
+          format: email
+          description: User's email address
+          example: "student@example.com"
+        name:
+          type: string
+          description: User's name
+          example: "John Doe"
+        created_at:
+          type: string
+          format: date-time
+          description: When the account was created
+          example: "2025-12-22T10:30:00Z"
+        updated_at:
+          type: string
+          format: date-time
+          description: When the profile was last updated
+          example: "2025-12-22T11:15:00Z"
+        expertise_level:
+          type: string
+          enum: [beginner, intermediate, advanced]
+          description: User's self-reported expertise level
+          example: "beginner"
+
+    UserProfileUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: User's updated name
+          example: "John Smith"
+        expertise_level:
+          type: string
+          enum: [beginner, intermediate, advanced]
+          description: Updated expertise level
+          example: "intermediate"
+
+    PersonalizationResponse:
+      type: object
+      required:
+        - user_id
+        - current_module
+        - current_chapter
+        - learning_path
+      properties:
+        user_id:
+          type: string
+          description: Unique identifier for the user
+          example: "user-12345"
+        current_module:
+          type: integer
+          description: Currently active module (1-4)
+          example: 1
+        current_chapter:
+          type: integer
+          description: Currently active chapter in the module
+          example: 3
+        learning_path:
+          type: string
+          description: Personalized learning path based on questionnaire
+          example: "hardware-focused"
+        progress:
+          type: object
+          description: Progress in each module
+          additionalProperties:
+            type: number
+            format: float
+            minimum: 0.0
+            maximum: 1.0
+            example: 0.65
+        preferences:
+          type: object
+          description: Content delivery preferences
+          properties:
+            difficulty_level:
+              type: string
+              enum: [basic, standard, advanced]
+              description: Preferred content difficulty
+              example: "standard"
+            explanation_depth:
+              type: string
+              enum: [concise, balanced, detailed]
+              description: Preferred explanation depth
+              example: "balanced"
+
+    PersonalizationUpdateRequest:
+      type: object
+      properties:
+        current_module:
+          type: integer
+          minimum: 1
+          maximum: 4
+          description: Updated current module
+          example: 2
+        current_chapter:
+          type: integer
+          minimum: 1
+          description: Updated current chapter
+          example: 1
+        learning_path:
+          type: string
+          description: Updated learning path
+          example: "theory-focused"
+        preferences:
+          type: object
+          description: Updated content delivery preferences
+          properties:
+            difficulty_level:
+              type: string
+              enum: [basic, standard, advanced]
+              description: Preferred content difficulty
+              example: "advanced"
+            explanation_depth:
+              type: string
+              enum: [concise, balanced, detailed]
+              description: Preferred explanation depth
+              example: "detailed"
+
+    LearningProgressResponse:
+      type: object
+      required:
+        - user_id
+        - modules
+      properties:
+        user_id:
+          type: string
+          description: Unique identifier for the user
+          example: "user-12345"
+        modules:
+          type: array
+          items:
+            $ref: '#/components/schemas/ModuleProgress'
+        overall_progress:
+          type: number
+          format: float
+          minimum: 0.0
+          maximum: 1.0
+          description: Overall progress through the textbook
+          example: 0.25
+
+    ModuleProgress:
+      type: object
+      required:
+        - module_id
+        - module_number
+        - progress
+        - completed_chapters
+      properties:
+        module_id:
+          type: string
+          description: Unique identifier for the module
+          example: "module-1"
+        module_number:
+          type: integer
+          description: Module number (1-4)
+          example: 1
+        progress:
+          type: number
+          format: float
+          minimum: 0.0
+          maximum: 1.0
+          description: Progress in this module
+          example: 0.6
+        completed_chapters:
+          type: array
+          items:
+            type: integer
+          description: List of completed chapter numbers
+          example: [1, 2, 3]
+        estimated_time_remaining:
+          type: integer
+          description: Estimated minutes remaining in this module
+          example: 120
+
+    LearningProgressUpdateRequest:
+      type: object
+      required:
+        - module_number
+        - chapter_number
+        - status
+      properties:
+        module_number:
+          type: integer
+          minimum: 1
+          maximum: 4
+          description: Module number (1-4)
+          example: 1
+        chapter_number:
+          type: integer
+          minimum: 1
+          description: Chapter number in the module
+          example: 3
+        status:
+          type: string
+          enum: [started, completed]
+          description: Status of the chapter
+          example: "completed"
+        time_spent:
+          type: integer
+          description: Time spent on the chapter in minutes
+          example: 45
+
+    UserPreferencesResponse:
+      type: object
+      required:
+        - user_id
+        - preferred_language
+        - content_preferences
+      properties:
+        user_id:
+          type: string
+          description: Unique identifier for the user
+          example: "user-12345"
+        preferred_language:
+          type: string
+          enum: [en, ur]
+          description: Preferred content language
+          example: "en"
+        content_preferences:
+          type: object
+          description: Additional content preferences
+          properties:
+            show_code_examples:
+              type: boolean
+              description: Whether to show code examples
+              example: true
+            enable_personalization:
+              type: boolean
+              description: Whether personalization is enabled
+              example: true
+            receive_notifications:
+              type: boolean
+              description: Whether to receive progress notifications
+              example: true
+
+    UserPreferencesUpdateRequest:
+      type: object
+      properties:
+        preferred_language:
+          type: string
+          enum: [en, ur]
+          description: Updated preferred content language
+          example: "ur"
+        content_preferences:
+          type: object
+          description: Updated content preferences
+          properties:
+            show_code_examples:
+              type: boolean
+              description: Whether to show code examples
+              example: false
+            enable_personalization:
+              type: boolean
+              description: Whether personalization is enabled
+              example: true
+            receive_notifications:
+              type: boolean
+              description: Whether to receive progress notifications
+              example: false

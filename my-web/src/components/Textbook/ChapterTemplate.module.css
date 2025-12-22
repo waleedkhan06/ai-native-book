@@ -1,0 +1,82 @@
+.chapterContainer {
+  padding: 2rem 0;
+  max-width: 100%;
+}
+
+.chapterHeader {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--ifm-color-emphasis-300);
+}
+
+.chapterTitle {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: var(--ifm-heading-color);
+}
+
+.chapterDescription {
+  font-size: 1.2rem;
+  color: var(--ifm-color-secondary-darkest);
+  margin: 0;
+}
+
+.chapterContent {
+  max-width: 100%;
+}
+
+/* Code block styling for robotics languages */
+.chapterContent pre {
+  background-color: #2d2d2d;
+  border-radius: 8px;
+  padding: 1rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.chapterContent code {
+  font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+  font-size: 0.9rem;
+}
+
+.chapterContent pre code {
+  background: none;
+  padding: 0;
+  border-radius: 0;
+}
+
+/* Specific styling for Python code blocks */
+.chapterContent pre.language-python {
+  border-left: 4px solid #3572A5;
+}
+
+/* Specific styling for URDF/XML code blocks */
+.chapterContent pre.language-xml {
+  border-left: 4px solid #0064bd;
+}
+
+/* Specific styling for C++ code blocks */
+.chapterContent pre.language-cpp {
+  border-left: 4px solid #00599c;
+}
+
+/* Specific styling for launch files */
+.chapterContent pre.language-xml.launch {
+  border-left: 4px solid #8c4fff;
+}
+
+/* Responsive design */
+@media (max-width: 996px) {
+  .chapterContainer {
+    padding: 1rem 0;
+  }
+
+  .chapterTitle {
+    font-size: 2rem;
+  }
+
+  .chapterDescription {
+    font-size: 1rem;
+  }
+}
