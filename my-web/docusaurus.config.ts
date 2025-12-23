@@ -18,7 +18,7 @@ const config: Config = {
   // Set the /<baseUrl>/ pathname under which your site is served
   baseUrl: '/',
 
-  trailingSlash: false,
+  trailingSlash: undefined,
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
