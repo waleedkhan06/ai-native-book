@@ -14,21 +14,14 @@ const config: Config = {
     v4: true, // Improve compatibility with the upcoming Docusaurus v4
   },
   // Set the production url of your site here
-  url: 'https://waleedkhan06.github.io',
+  url: 'https://your-vercel-domain.vercel.app',
   // Set the /<baseUrl>/ pathname under which your site is served
-  // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/ai-native-book/',
+  baseUrl: '/',
 
-  // Add trailingSlash config to avoid GitHub Pages redirect issues
-  trailingSlash: false,
+  trailingSlash: undefined,
 
-  onBrokenLinks: 'warn', // Change from default 'throw' to 'warn' to allow deployment
+  onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
-
-  //  GitHub pages deployment config.
-  // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'waleedkhan06', // Usually your GitHub org/user name.
-  projectName: 'ai-native-book', // Usually your repo name.
 
   // onBrokenLinks: 'throw',
 
@@ -49,7 +42,7 @@ const config: Config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/haclathon/ai-native-book/tree/main/',
+            'https://github.com/waleedkhan06/ai-native-book/tree/main/',
         },
         theme: {
           customCss: './src/css/custom.css',
@@ -85,7 +78,7 @@ const config: Config = {
           label: 'Textbook',
         },
         {
-          href: 'https://github.com/haclathon/ai-native-book',
+          href: 'https://github.com/waleedkhan06/ai-native-book',
           label: 'GitHub',
           position: 'right',
         },
@@ -133,7 +126,7 @@ const config: Config = {
           items: [
             {
               label: 'GitHub',
-              href: 'https://github.com/haclathon/ai-native-book',
+              href: 'https://github.com/waleedkhan06/ai-native-book',
             },
             {
               label: 'Discord',

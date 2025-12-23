@@ -13,7 +13,8 @@
       "Bash(cat /tmp/claude/-mnt-e-haclathon-ai-native-book/tasks/bee31fe.output)",
       "Bash(npm run build)",
       "Bash(cat /tmp/claude/-mnt-e-haclathon-ai-native-book/tasks/bf952d6.output)",
-      "Bash(git add .claude/settings.local.json my-web/docusaurus.config.ts .github/)"
+      "Bash(git add .claude/settings.local.json my-web/docusaurus.config.ts .github/)",
+      "Bash(cat /tmp/claude/-mnt-e-haclathon-ai-native-book/tasks/bd963b7.output)"
     ]
   }
 }
