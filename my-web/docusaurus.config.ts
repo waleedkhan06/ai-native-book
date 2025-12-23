@@ -15,15 +15,15 @@ const config: Config = {
 
   },//
   // Set the production url of your site here
-  url: 'https://ai-native-book-ojd1agany-waleed0248s-projects.vercel.app',
+  url: 'https://waleedkhan06.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/',
+  baseUrl: '/ai-native-book/',
 
   //  GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  // organizationName: 'haclathon', // Usually your GitHub org/user name.
-  // projectName: 'ai-native-book', // Usually your repo name.
+  organizationName: 'waleedkhan06', // Usually your GitHub org/user name.
+  projectName: 'ai-native-book', // Usually your repo name.
 
   // onBrokenLinks: 'throw',
 
