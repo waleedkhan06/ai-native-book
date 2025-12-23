@@ -8,7 +8,12 @@
       "Bash(npm install @tailwindcss/postcss)",
       "Bash(.specify/scripts/bash/check-prerequisites.sh --json --require-tasks --include-tasks)",
       "Bash(git rev-parse --git-dir)",
-      "Bash(timeout 30 npx docusaurus start:*)"
+      "Bash(timeout 30 npx docusaurus start:*)",
+      "Bash(cat /tmp/claude/-mnt-e-haclathon-ai-native-book/tasks/b162caf.output)",
+      "Bash(cat /tmp/claude/-mnt-e-haclathon-ai-native-book/tasks/bee31fe.output)",
+      "Bash(npm run build)",
+      "Bash(cat /tmp/claude/-mnt-e-haclathon-ai-native-book/tasks/bf952d6.output)",
+      "Bash(git add .claude/settings.local.json my-web/docusaurus.config.ts .github/)"
     ]
   }
 }
