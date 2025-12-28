@@ -1,58 +1,71 @@
-import type {ReactNode} from 'react';
-import clsx from 'clsx';
-import Link from '@docusaurus/Link';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
-import Layout from '@theme/Layout';
-import HomepageFeatures from '@site/src/components/HomepageFeatures';
-import Heading from '@theme/Heading';
-import {FaBook, FaRobot, FaCode, FaTools} from 'react-icons/fa';
-import ParticleBackground from '@site/src/components/ParticleBackground';
+import Link from "@docusaurus/Link";
+import Layout from "@theme/Layout";
+import { FaBook, FaRobot } from "react-icons/fa";
+import CardComponent from "@site/src/components/CardComponent";
 
-import styles from './index.module.css';
-
-function HomepageHeader() {
-  const {siteConfig} = useDocusaurusContext();
+export default function Home(): JSX.Element {
   return (
-    <header className={clsx('hero hero--primary', styles.heroBanner)}>
-      <div className="container">
-        <Heading as="h1" className="hero__title" style={{ color: '#8B5CF6' }}>
-          {siteConfig.title}
-        </Heading>
-        <p className="hero__subtitle" style={{ color: 'white' }}>{siteConfig.tagline}</p>
-        <div className={styles.buttons}>
-          <Link
-            className="button button--primary button--lg"
-            style={{ backgroundColor: '#A78BFA', borderColor: '#A78BFA' }}
-            to="/docs/intro">
-            <FaBook className={styles.buttonIcon} /> Explore Textbook
-          </Link>
-          <span className={styles.spacer}></span>
-          <Link
-            className="button button--secondary button--lg"
-            style={{ backgroundColor: '#7C3AED', borderColor: '#7C3AED' }}
-            to="/docs/tutorial">
-            <FaRobot className={styles.buttonIcon} /> AI Book Tutorial
-          </Link>
-        </div>
-      </div>
-    </header>
-  );
-}
+    <Layout title="Physical AI & Humanoid Robotics Textbook" description="The Complete Guide to Embodied Intelligence">
+      <div className="floating-dots-fullpage">
+        {/* Hero Section */}
+        <header className="text--center padding-vert--xl">
+          <div className="container">
+            <h1 className="main-title">
+              Physical AI & Humanoid <br />
+              Robotics Textbook
+            </h1>
+            <p className="subtitle">
+              The Complete Guide to Embodied Intelligence. Master the future of robotics through interactive AI-powered
+              learning and hands-on projects.
+            </p>
+            {/* ✅ FIX: Add .hero__button-group wrapper */}
+            <div className="hero__button-group margin-top--lg">
+              <Link
+                to="/docs/intro"
+                className="button button--secondary button--lg"
+                style={{ backgroundColor: "#9333EA", border: "none", color: "white" }}
+              >
+                <FaBook style={{ marginRight: "10px" }} />
+                Explore Textbook
+              </Link>
+              <Link
+                to="/docs/tutorial"
+                className="button button--secondary button--lg"
+                style={{ backgroundColor: "#A855F7", border: "none", color: "white" }}
+              >
+                <FaRobot style={{ marginRight: "10px" }} />
+                AI Book Tutorial
+              </Link>
+            </div>
+          </div>
+        </header>
 
-export default function Home(): ReactNode {
-  const {siteConfig} = useDocusaurusContext();
-  return (
-    <Layout
-      title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />"
-      style={{ backgroundColor: '#111827' }}>
-      <div style={{ position: 'relative', minHeight: '100vh', backgroundColor: '#111827', color: 'white' }}>
-        <ParticleBackground />
-        <HomepageHeader />
-        <main style={{ position: 'relative', zIndex: 1 }}>
-          <HomepageFeatures />
+        {/* Cards + Content */}
+        <main className="container padding-bottom--xl">
+          <CardComponent />
+
+          <div className="margin-top--xl text--left doc-content" style={{ maxWidth: "800px", margin: "4rem auto 0" }}>
+            <h2>Overview</h2>
+            <p>
+              Welcome to the Physical AI & Humanoid Robotics textbook. This comprehensive resource is designed to take
+              you from the fundamentals of robotics to advanced topics in embodied intelligence. Whether you're a
+              student, researcher, or hobbyist, you'll find everything you need to build and deploy intelligent robotic
+              systems.
+            </p>
+
+            <div className="margin-top--lg">
+              <h3>Learning Objectives</h3>
+              <ul>
+                <li>Understand the fundamental concepts of Physical AI and embodied intelligence.</li>
+                <li>Master ROS2 architecture and middleware for complex robotic systems.</li>
+                <li>Build and simulate humanoid robots in physics-based environments like Gazebo and Unity.</li>
+                <li>Implement advanced perception using NVIDIA Isaac and computer vision.</li>
+                <li>Explore the intersection of Vision, Language, and Action in modern robotics.</li>
+              </ul>
+            </div>
+          </div>
         </main>
       </div>
     </Layout>
   );
-}
+} 

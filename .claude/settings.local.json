@@ -15,7 +15,8 @@
       "Bash(cat /tmp/claude/-mnt-e-haclathon-ai-native-book/tasks/bf952d6.output)",
       "Bash(git add .claude/settings.local.json my-web/docusaurus.config.ts .github/)",
       "Bash(cat /tmp/claude/-mnt-e-haclathon-ai-native-book/tasks/bd963b7.output)",
-      "Bash(timeout 120 npm run build)"
+      "Bash(timeout 120 npm run build)",
+      "Bash(npx docusaurus build --config docusaurus.config.ts)"
     ]
   }
 }

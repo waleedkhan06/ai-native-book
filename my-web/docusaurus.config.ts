@@ -21,7 +21,13 @@ const config: Config = {
   trailingSlash: undefined,
 
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
+  markdown: {
+    format: 'mdx',
+    mermaid: true,
+    hooks: {
+      onBrokenMarkdownLinks: 'warn',
+    },
+  },
 
   // onBrokenLinks: 'throw',
 
@@ -43,6 +49,9 @@ const config: Config = {
           // Remove this to remove the "edit this page" links.
           editUrl:
             'https://github.com/waleedkhan06/ai-native-book/tree/main/',
+          showLastUpdateTime: true,
+          showLastUpdateAuthor: true,
+          sidebarCollapsible: true,
         },
         theme: {
           customCss: './src/css/custom.css',
@@ -114,11 +123,19 @@ const config: Config = {
             {
               label: 'Projects',
               to: '/docs/projects',
+              
             },
+            {
+              label: 'blog',
+              to: '/blog',
+              
+            },
+            
             {
               label: 'Hardware Guide',
               to: '/docs/hardware',
             },
+          
           ],
         },
         {

@@ -1,84 +1,72 @@
-import React from 'react';
+import React, { useCallback } from "react";
+import Particles from "@tsparticles/react";
+import { loadSlim } from "@tsparticles/slim";
+import type { Container, Engine } from "@tsparticles/engine";
 
-interface ParticleBackgroundProps {
-  className?: string;
-}
+const ParticleBackground: React.FC = () => {
+  const particlesInit = useCallback(async (engine: Engine) => {
+    await loadSlim(engine);
+  }, []);
 
-const ParticleBackground: React.FC<ParticleBackgroundProps> = ({ className = '' }) => {
-  // Create 50+ animated circles with varying properties
-  const particles = Array.from({ length: 60 }, (_, i) => {
-    const size = Math.random() * 10 + 2; // Random size between 2px and 12px
-    const posX = Math.random() * 100; // Random position X percentage
-    const posY = Math.random() * 100; // Random position Y percentage
-    const animationDuration = Math.random() * 20 + 10; // Random animation duration between 10-30s
-    const animationDelay = Math.random() * 5; // Random delay between 0-5s
-    const opacity = Math.random() * 0.5 + 0.1; // Random opacity between 0.1-0.6
-    const isPurple = Math.random() > 0.5; // Randomly choose purple or white
-
-    return {
-      id: i,
-      size: `${size}px`,
-      top: `${posY}%`,
-      left: `${posX}%`,
-      animationDuration: `${animationDuration}s`,
-      animationDelay: `${animationDelay}s`,
-      opacity,
-      backgroundColor: isPurple ? '#8B5CF6' : '#FFFFFF',
-    };
-  });
+  const particlesLoaded = useCallback(async (container?: Container) => {
+    // Optional: console.log("Particles loaded", container);
+  }, []);
 
   return (
-    <div className={`particle-background ${className}`}>
-      {particles.map((particle) => (
-        <div
-          key={particle.id}
-          className="particle"
-          style={{
-            position: 'absolute',
-            width: particle.size,
-            height: particle.size,
-            top: particle.top,
-            left: particle.left,
-            backgroundColor: particle.backgroundColor,
-            borderRadius: '50%',
-            opacity: particle.opacity,
-            animation: `float ${particle.animationDuration} ease-in-out infinite`,
-            animationDelay: particle.animationDelay,
-            willChange: 'transform',
-          }}
-        />
-      ))}
-      <style jsx>{`
-        .particle-background {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          pointer-events: none;
-          z-index: -1;
-          overflow: hidden;
-        }
-
-        @keyframes float {
-          0% {
-            transform: translate(0, 0) rotate(0deg);
-          }
-          25% {
-            transform: translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px) rotate(90deg);
-          }
-          50% {
-            transform: translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px) rotate(180deg);
-          }
-          75% {
-            transform: translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px) rotate(270deg);
-          }
-          100% {
-            transform: translate(0, 0) rotate(360deg);
-          }
-        }
-      `}</style>
-    </div>
+    <Particles
+      id="tsparticles"
+      init={particlesInit}
+      loaded={particlesLoaded}
+      options={{
+        background: {
+          color: {
+            value: "transparent", // Let page background show through
+          },
+        },
+        fpsLimit: 120,
+        particles: {
+          color: {
+            value: ["#9333EA", "#A855F7", "#C4B5FD", "#FFFFFF"],
+          },
+          links: {
+            enable: false, // Remove lines for cleaner look
+          },
+          move: {
+            enable: true,
+            speed: 0.5,
+            direction: "none",
+            random: true,
+            straight: false,
+            outModes: "out",
+          },
+          number: {
+            density: {
+              enable: true,
+              area: 800,
+            },
+            value: 40, // Fewer particles = more subtle
+          },
+          opacity: {
+            value: { min: 0.1, max: 0.5 },
+          },
+          shape: {
+            type: "circle",
+          },
+          size: {
+            value: { min: 1, max: 3 },
+          },
+        },
+        detectRetina: true,
+      }}
+      style={{
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        zIndex: -1,
+      }}
+    />
   );
 };
 
