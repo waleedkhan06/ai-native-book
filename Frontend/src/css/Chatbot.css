@@ -9,8 +9,8 @@
   border-radius: 12px;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   z-index: 9999;
   overflow: hidden;
 }
@@ -64,8 +64,14 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .chatbot-message.user {
@@ -88,18 +94,11 @@
   line-height: 1.4;
 }
 
-/* Typing indicator animation */
+/* Typing indicator - keep original styling without wrapper message styles */
 .typing-indicator {
   display: flex;
   align-items: center;
-  padding: 10px 14px;
-  background-color: #374151;
-  border: 1px solid #4b5563;
-  color: #f3f4f6;
-  align-self: flex-start;
-  border-radius: 18px;
-  border-bottom-left-radius: 4px;
-  max-width: 85%;
+  gap: 4px;
 }
 
 .typing-dots {
@@ -129,7 +128,9 @@
 }
 
 @keyframes typing {
-  0%, 60%, 100% {
+  0%,
+  60%,
+  100% {
     transform: translateY(0);
     opacity: 0.6;
   }
@@ -212,6 +213,13 @@
 
 .chatbot-float-button:focus {
   outline: none;
+}
+
+/* Fixed logo size to fit properly in the 60px button */
+.chatbot-logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
 }
 
 /* Mobile responsiveness */
@@ -310,20 +318,4 @@
     height: 45px;
     font-size: 18px;
   }
-}
-
-.chatbot-logo {
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
-}
-
-.typing-indicator {
-  display: flex;
-  align-items: center;
-  padding: 10px 14px;
-  background-color: transparent;
-  border: none;
-  color: #f3f4f6;
-  max-width: 85%;
 }
