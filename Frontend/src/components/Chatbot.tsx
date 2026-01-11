@@ -10,8 +10,6 @@ interface Message {
   text: string
 }
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL
-
 const Chatbot = () => {
   const [messages, setMessages] = useState<Message[]>([
     { id: 1, sender: "bot", text: "Hello! How can I help you today?" },
@@ -33,19 +31,6 @@ const Chatbot = () => {
   const handleSend = async () => {
     if (!input.trim()) return
 
-    if (!API_URL) {
-      console.error("NEXT_PUBLIC_API_URL is not defined")
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: Date.now(),
-          sender: "bot",
-          text: "Configuration error: API URL not set.",
-        },
-      ])
-      return
-    }
-
     const userMessage: Message = {
       id: Date.now(),
       sender: "user",
@@ -59,7 +44,7 @@ const Chatbot = () => {
     try {
       const selectedText = getSelectedText()
 
-      const response = await fetch(`${API_URL}/v1/chat/completions`, {
+      const response = await fetch("https://khan063-rag-chatbot-backend.hf.space/v1/chat/completions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
