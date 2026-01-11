@@ -47,10 +47,11 @@ export default function Home(): JSX.Element {
           <div className="margin-top--xl text--left doc-content" style={{ maxWidth: "800px", margin: "4rem auto 0" }}>
             <h2>Overview</h2>
             <p>
-              Welcome to the Physical AI & Humanoid Robotics textbook. This comprehensive resource is designed to take
-              you from the fundamentals of robotics to advanced topics in embodied intelligence. Whether you're a
-              student, researcher, or hobbyist, you'll find everything you need to build and deploy intelligent robotic
-              systems.
+              Welcome to the Physical AI & Humanoid Robotics textbook, a comprehensive guide
+               designed to take you from foundational robotics principles to advanced embodied
+                intelligence. Whether you are a student, researcher, or enthusiast, this resource
+                 equips you to explore cutting-edge robotic technologies, master autonomous system
+                  design, integrate sensors and actuators, advance practical AI applications, and deploy intelligent humanoid systems with confidence.
             </p>
 
             <div className="margin-top--lg">
