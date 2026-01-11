@@ -1,0 +1,622 @@
+openapi: 3.0.3
+info:
+  title: RAG Chatbot API
+  description: API for the Retrieval-Augmented Generation Chatbot System
+  version: 1.0.0
+  contact:
+    name: RAG Chatbot Development Team
+    email: team@example.com
+servers:
+  - url: https://api.rag-chatbot.example.com/v1
+    description: Production server
+  - url: https://staging-api.rag-chatbot.example.com/v1
+    description: Staging server
+  - url: http://localhost:8000/v1
+    description: Development server
+
+paths:
+  /chat/completions:
+    post:
+      summary: Generate chat completion with RAG
+      description: Send a message to the chatbot and receive a response with context from the knowledge base
+      operationId: getChatCompletion
+      tags:
+        - Chat
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - messages
+              properties:
+                messages:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Message'
+                  description: The conversation history including the user's query
+                model:
+                  type: string
+                  default: "xiaomi/mimo-v2-flash:free"
+                  description: The model to use for generation
+                max_tokens:
+                  type: integer
+                  default: 1000
+                  description: Maximum number of tokens to generate
+                temperature:
+                  type: number
+                  default: 0.7
+                  minimum: 0
+                  maximum: 1
+                  description: Controls randomness in generation
+                top_p:
+                  type: number
+                  default: 0.9
+                  minimum: 0
+                  maximum: 1
+                  description: Controls diversity via nucleus sampling
+                conversation_id:
+                  type: string
+                  format: uuid
+                  description: Optional conversation ID to continue a conversation
+                context_sources:
+                  type: array
+                  items:
+                    type: string
+                  description: Sources to limit the RAG retrieval to
+              example:
+                messages:
+                  - role: "user"
+                    content: "What are the key principles of RAG systems?"
+                conversation_id: "123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        '200':
+          description: Successful response with chat completion
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatCompletionResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth: []
+
+  /documents:
+    get:
+      summary: List documents in the knowledge base
+      description: Retrieve a paginated list of documents that have been ingested into the system
+      operationId: listDocuments
+      tags:
+        - Documents
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 20
+            maximum: 100
+          description: Number of documents to return
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 0
+          description: Number of documents to skip
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [INGESTED, PROCESSING, FAILED]
+          description: Filter documents by status
+      responses:
+        '200':
+          description: List of documents
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  documents:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Document'
+                  total:
+                    type: integer
+                    description: Total number of documents
+                  limit:
+                    type: integer
+                    description: Number of documents returned
+                  offset:
+                    type: integer
+                    description: Number of documents skipped
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth: []
+    post:
+      summary: Add a new document to the knowledge base
+      description: Ingest a new document into the RAG system
+      operationId: addDocument
+      tags:
+        - Documents
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - title
+                - content
+                - source_url
+              properties:
+                title:
+                  type: string
+                  description: Title of the document
+                content:
+                  type: string
+                  description: Full text content of the document
+                source_url:
+                  type: string
+                  format: uri
+                  description: Original URL or path of the document
+                metadata:
+                  type: object
+                  additionalProperties: true
+                  description: Additional metadata about the document
+      responses:
+        '201':
+          description: Document successfully added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth: []
+
+  /documents/{documentId}:
+    get:
+      summary: Get document details
+      description: Retrieve details about a specific document
+      operationId: getDocument
+      tags:
+        - Documents
+      parameters:
+        - name: documentId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID of the document to retrieve
+      responses:
+        '200':
+          description: Document details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth: []
+    delete:
+      summary: Delete a document
+      description: Remove a document from the knowledge base
+      operationId: deleteDocument
+      tags:
+        - Documents
+      parameters:
+        - name: documentId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID of the document to delete
+      responses:
+        '204':
+          description: Document successfully deleted
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth: []
+
+  /conversations:
+    get:
+      summary: List conversations
+      description: Retrieve a paginated list of conversations for the authenticated user
+      operationId: listConversations
+      tags:
+        - Conversations
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 20
+            maximum: 100
+          description: Number of conversations to return
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 0
+          description: Number of conversations to skip
+      responses:
+        '200':
+          description: List of conversations
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  conversations:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Conversation'
+                  total:
+                    type: integer
+                    description: Total number of conversations
+                  limit:
+                    type: integer
+                    description: Number of conversations returned
+                  offset:
+                    type: integer
+                    description: Number of conversations skipped
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth: []
+
+  /conversations/{conversationId}:
+    get:
+      summary: Get conversation details
+      description: Retrieve details about a specific conversation
+      operationId: getConversation
+      tags:
+        - Conversations
+      parameters:
+        - name: conversationId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID of the conversation to retrieve
+      responses:
+        '200':
+          description: Conversation details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Conversation'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - bearerAuth: []
+
+  /health:
+    get:
+      summary: Health check
+      description: Check the health status of the API
+      operationId: healthCheck
+      tags:
+        - Health
+      responses:
+        '200':
+          description: API is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [healthy]
+                  timestamp:
+                    type: string
+                    format: date-time
+                    description: Current timestamp
+
+components:
+  schemas:
+    Message:
+      type: object
+      required:
+        - role
+        - content
+      properties:
+        role:
+          type: string
+          enum: [user, assistant, system]
+          description: The role of the message sender
+        content:
+          type: string
+          description: The content of the message
+        timestamp:
+          type: string
+          format: date-time
+          description: When the message was created
+        sources:
+          type: array
+          items:
+            type: string
+          description: Sources referenced in the message (for RAG responses)
+      example:
+        role: "user"
+        content: "What are the key principles of RAG systems?"
+        timestamp: "2023-10-01T12:00:00Z"
+
+    ChatCompletionResponse:
+      type: object
+      required:
+        - id
+        - object
+        - created
+        - model
+        - choices
+        - usage
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the chat completion
+        object:
+          type: string
+          enum: [chat.completion]
+          description: Object type, always "chat.completion"
+        created:
+          type: integer
+          format: int64
+          description: Unix timestamp of when the completion was created
+        model:
+          type: string
+          description: The model used for the completion
+        conversation_id:
+          type: string
+          format: uuid
+          description: ID of the conversation (newly created or existing)
+        choices:
+          type: array
+          items:
+            type: object
+            required:
+              - index
+              - message
+              - finish_reason
+            properties:
+              index:
+                type: integer
+                description: Index of the choice
+              message:
+                $ref: '#/components/schemas/Message'
+              finish_reason:
+                type: string
+                enum: [stop, length, content_filter]
+                description: Reason why the completion finished
+        usage:
+          type: object
+          required:
+            - prompt_tokens
+            - completion_tokens
+            - total_tokens
+          properties:
+            prompt_tokens:
+              type: integer
+              description: Number of tokens in the prompt
+            completion_tokens:
+              type: integer
+              description: Number of tokens in the completion
+            total_tokens:
+              type: integer
+              description: Total number of tokens used
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/Source'
+          description: Sources used in the RAG response
+
+    Source:
+      type: object
+      properties:
+        document_id:
+          type: string
+          format: uuid
+          description: ID of the source document
+        document_title:
+          type: string
+          description: Title of the source document
+        content:
+          type: string
+          description: Content of the retrieved chunk
+        score:
+          type: number
+          description: Similarity score of the retrieved chunk
+
+    Document:
+      type: object
+      required:
+        - id
+        - title
+        - source_url
+        - created_at
+        - status
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the document
+        title:
+          type: string
+          description: Title of the document
+        content:
+          type: string
+          description: Content of the document (may be truncated in list responses)
+        source_url:
+          type: string
+          format: uri
+          description: Original URL or path of the document
+        checksum:
+          type: string
+          description: SHA-256 hash to detect changes
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when document was ingested
+        updated_at:
+          type: string
+          format: date-time
+          description: Timestamp when document was last updated
+        metadata:
+          type: object
+          additionalProperties: true
+          description: Additional metadata about the document
+        status:
+          type: string
+          enum: [INGESTED, PROCESSING, FAILED]
+          description: Status of the document
+        chunk_count:
+          type: integer
+          description: Number of chunks created from this document
+
+    Conversation:
+      type: object
+      required:
+        - id
+        - title
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the conversation
+        user_id:
+          type: string
+          format: uuid
+          description: ID of the user who owns the conversation
+        title:
+          type: string
+          description: Auto-generated title for the conversation
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when conversation started
+        updated_at:
+          type: string
+          format: date-time
+          description: Timestamp of last activity
+        message_count:
+          type: integer
+          description: Number of messages in the conversation
+        metadata:
+          type: object
+          additionalProperties: true
+          description: Additional conversation metadata
+
+  responses:
+    BadRequest:
+      description: Bad request - invalid input parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error:
+              code: "invalid_request"
+              message: "The request was malformed or missing required fields"
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error:
+              code: "not_found"
+              message: "The requested resource was not found"
+    RateLimitExceeded:
+      description: Rate limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error:
+              code: "rate_limit_exceeded"
+              message: "You have exceeded your rate limit. Please try again later."
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error:
+              code: "internal_error"
+              message: "An internal server error occurred"
+
+    Error:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: object
+          required:
+            - code
+            - message
+          properties:
+            code:
+              type: string
+              description: Error code
+            message:
+              type: string
+              description: Human-readable error message
+            details:
+              type: object
+              description: Additional error details (optional)
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token for authentication
+
+security:
+  - bearerAuth: []
+
+tags:
+  - name: Chat
+    description: Chat completion endpoints
+  - name: Documents
+    description: Document management endpoints
+  - name: Conversations
+    description: Conversation management endpoints
+  - name: Health
+    description: Health check endpoints

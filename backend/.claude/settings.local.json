@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(kill 56057)",
+      "Bash(python3 check_docs.py)"
+    ]
+  }
+}

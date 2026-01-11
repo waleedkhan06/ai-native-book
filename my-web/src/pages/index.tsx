@@ -21,7 +21,7 @@ export default function Home(): JSX.Element {
             {/* ✅ FIX: Add .hero__button-group wrapper */}
             <div className="hero__button-group margin-top--lg">
               <Link
-                to="/docs/intro"
+                to="/docs/module-1/"
                 className="button button--secondary button--lg"
                 style={{ backgroundColor: "#9333EA", border: "none", color: "white" }}
               >

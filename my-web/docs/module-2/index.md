@@ -1,4 +1,5 @@
-# Module 2: Gazebo & Unity Simulation
+# Module 2: The Digital Twin (Gazebo & Unity)
+
 
 Welcome to the Gazebo & Unity Simulation module. This module covers physics simulation, sensor simulation, and human-robot interaction in virtual environments.
 

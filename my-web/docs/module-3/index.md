@@ -1,4 +1,5 @@
-# Module 3: NVIDIA Isaac Platform
+# Module 3: The AI-Robot Brain (NVIDIA Isaac™)
+
 
 Welcome to the NVIDIA Isaac Platform module. This module covers Isaac Sim, perception systems, reinforcement learning, and sim-to-real transfer techniques.
 

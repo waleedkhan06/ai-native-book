@@ -1,6 +1,6 @@
 ---
 sidebar_position: 1
-title: "Module 1: ROS2 Fundamentals"
+title: "Module 1:  The Robotic Nervous System (ROS 2)"
 description: "Introduction to Robot Operating System 2 (ROS2) fundamentals for Physical AI and Humanoid Robotics"
 ---
 

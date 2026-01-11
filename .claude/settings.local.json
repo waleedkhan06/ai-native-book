@@ -16,7 +16,31 @@
       "Bash(git add .claude/settings.local.json my-web/docusaurus.config.ts .github/)",
       "Bash(cat /tmp/claude/-mnt-e-haclathon-ai-native-book/tasks/bd963b7.output)",
       "Bash(timeout 120 npm run build)",
-      "Bash(npx docusaurus build --config docusaurus.config.ts)"
+      "Bash(npx docusaurus build --config docusaurus.config.ts)",
+      "Bash(kill -9 10630)",
+      "Bash(cat app/core/config.py)",
+      "Bash(curl -X GET http://127.0.0.1:8000/api/v1/health)",
+      "Bash(python /mnt/e/ai-native-book/backend/scripts/index_all_docs.py)",
+      "Bash(python3 -m venv .venv)",
+      "Bash(source .venv/bin/activate)",
+      "Bash(PYTHONPATH=. python -c \"\nimport sys\nimport os\nsys.path.insert\\(0, os.getcwd\\(\\)\\)\nfrom scripts.index_all_docs import index_all_documentation\nfrom pathlib import Path\n\n# Get the docs path\nproject_root = Path\\(''.''\\).parent  # backend directory, so parent is project root\ndocs_path = project_root / ''my-web'' / ''docs''\n\nprint\\(f''Indexing documentation from: {docs_path}''\\)\nif docs_path.exists\\(\\):\n    print\\(''Documentation directory exists, starting indexing...''\\)\n    index_all_documentation\\(str\\(docs_path\\)\\)\nelse:\n    print\\(f''Error: Documentation directory does not exist: {docs_path}''\\)\n\")",
+      "Bash(timeout 60s python -c \"\nimport sys\nimport os\nsys.path.insert\\(0, os.getcwd\\(\\)\\)\nfrom scripts.index_all_docs import index_all_documentation\nfrom pathlib import Path\n\n# Get the docs path - need to go up one level from backend to project root\ndocs_path = Path\\(''../my-web/docs''\\)\n\nprint\\(f''Indexing documentation from: {docs_path}''\\)\nif docs_path.exists\\(\\):\n    print\\(''Documentation directory exists, starting indexing...''\\)\n    try:\n        index_all_documentation\\(str\\(docs_path\\)\\)\n        print\\(''Indexing completed successfully!''\\)\n    except Exception as e:\n        print\\(f''Indexing failed: {e}''\\)\n        import traceback\n        traceback.print_exc\\(\\)\nelse:\n    print\\(f''Error: Documentation directory does not exist: {docs_path}''\\)\n\")",
+      "Bash(python -c \"\nfrom app.services.embeddings import get_embeddings\n\ntry:\n    embeddings = get_embeddings\\(\\)\n    print\\(''✓ Cohere embeddings service initialized successfully with new API key''\\)\n    print\\(f''✓ Embeddings model: {type\\(embeddings\\).__name__}''\\)\nexcept Exception as e:\n    print\\(f''✗ Error initializing Cohere embeddings: {e}''\\)\n    import traceback\n    traceback.print_exc\\(\\)\n\")",
+      "Bash(curl -s -X POST http://127.0.0.1:8000/api/v1/chat )",
+      "Bash(python -c \"\nfrom qdrant_client import QdrantClient\nfrom app.core.config import settings\nimport json\n\n# Directly query Qdrant to check collection info\nclient = QdrantClient\\(\n    url=settings.qdrant_url,\n    api_key=settings.qdrant_api_key,\n    prefer_grpc=False\n\\)\n\ncollection_name = settings.collection_name\nprint\\(f''Collection name: {collection_name}''\\)\n\n# Get collection info\ncollection_info = client.get_collection\\(collection_name\\)\nprint\\(f''Vector count: {collection_info.points_count}''\\)\nprint\\(f''Vector size \\(dimension\\): {collection_info.config.params.vectors.size}''\\)\n\n# Get sample points to see payload structure\nsample_points = client.scroll\\(\n    collection_name=collection_name,\n    limit=3,\n    with_payload=True,\n    with_vectors=False\n\\)\n\nprint\\(''First retrieved payload sample:''\\)\nif sample_points[0]:\n    point = sample_points[0][0]\n    print\\(f''ID: {point.id}''\\)\n    print\\(f''Payload keys: {list\\(point.payload.keys\\(\\)\\)}''\\)\n    print\\(f''Payload content: {json.dumps\\(point.payload, indent=2\\)}''\\)\nelse:\n    print\\(''No points found in collection''\\)\n\")",
+      "Bash(python -c \"\nfrom app.services.embeddings import get_embeddings\n\n# Check embedding model dimensions\nembeddings = get_embeddings\\(\\)\nprint\\(f''Embedding model: {type\\(embeddings\\).__name__}''\\)\nprint\\(f''Embedding dimension: {len\\(embeddings.embed_query\\(\"\"test\"\"\\)\\)}''\\)\n\n# Test direct similarity search using the same embeddings as the application\nfrom app.services.vector_store import VectorStoreService\n\nvector_store = VectorStoreService\\(\\)\nprint\\(f''Vector store type: {type\\(vector_store.vector_store\\).__name__}''\\)\n\n# Test similarity search with raw results\nresults = vector_store.similarity_search_with_score\\(''Module 1'', k=3\\)\nprint\\(f''Raw search results count: {len\\(results\\)}''\\)\n\nfor i, \\(doc, score\\) in enumerate\\(results\\):\n    print\\(f''\\\\nResult {i+1}:''\\)\n    print\\(f''  Score: {score}''\\)\n    print\\(f''  Source: {doc.metadata.get\\(\"\"source\"\", \"\"Unknown\"\"\\)}''\\)\n    print\\(f''  Content preview: {doc.page_content[:200]}...''\\)\n    print\\(f''  Metadata: {doc.metadata}''\\)\n\")",
+      "Bash(python backend/verify_collection.py)",
+      "Bash(python3 -m pip install:*)",
+      "Bash(source ../.venv/bin/activate)",
+      "Bash(python -m pip install -r requirements.txt)",
+      "Bash(../.venv/bin/python -m pip install -r requirements.txt)",
+      "Bash(python3 -m venv temp_venv)",
+      "Bash(source temp_venv/bin/activate)",
+      "Bash(pip install --upgrade pip)",
+      "Bash(pip install -r backend/requirements.txt)",
+      "Bash(PYTHONPATH=. python3 scripts/index_all_docs.py)",
+      "Bash(pip install qdrant-client==1.12.1)",
+      "Bash(pip install -r requirements.txt)"
     ]
   }
 }
