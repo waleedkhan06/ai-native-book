@@ -1,6 +1,5 @@
 "use client"
 
-import type React from "react"
 import { useState, useEffect, useRef } from "react"
 import "../css/Chatbot.css"
 
@@ -9,6 +8,9 @@ interface Message {
   sender: "user" | "bot"
   text: string
 }
+
+// Direct Hugging Face backend URL
+const API_URL = "https://khan063-rag-chatbot-backend.hf.space"
 
 const Chatbot = () => {
   const [messages, setMessages] = useState<Message[]>([
@@ -44,14 +46,19 @@ const Chatbot = () => {
     try {
       const selectedText = getSelectedText()
 
-      const response = await fetch("https://khan063-rag-chatbot-backend.hf.space/v1/chat/completions", {
+      // Updated payload to match HF RAG API format
+      const response = await fetch(`${API_URL}/v1/chat/completions`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          question: input,
-          selected_text: selectedText,
+          messages: [
+            {
+              role: "user",
+              content: selectedText ? `${input}\nContext: ${selectedText}` : input,
+            },
+          ],
         }),
       })
 
@@ -61,10 +68,14 @@ const Chatbot = () => {
 
       const data = await response.json()
 
+      // Parse Hugging Face RAG response
+      const botText =
+        data?.choices?.[0]?.message?.content || "Sorry, I could not process your request."
+
       const botMessage: Message = {
         id: Date.now() + 1,
         sender: "bot",
-        text: data.answer || "Sorry, I could not process your request.",
+        text: botText,
       }
 
       setMessages((prev) => [...prev, botMessage])
