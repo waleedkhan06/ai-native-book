@@ -62,7 +62,7 @@ Ready to dive deeper? Explore our comprehensive textbook content:
 - [Module 1: ROS2 Fundamentals](/docs/module-1/)
 - [Module 2: Gazebo & Unity Simulation](/docs/module-2/)
 - [Module 3: NVIDIA Isaac Platform](/docs/module-3/)
-- [Module 4: VISION-LANGUAGE-Action](/docs/module-3/)
+- [Module 4: VISION-LANGUAGE-ACTION](/docs/module-3/)
 
 ## Need Help?
 
