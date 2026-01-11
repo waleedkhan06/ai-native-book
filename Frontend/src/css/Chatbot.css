@@ -313,8 +313,17 @@
 }
 
 .chatbot-logo {
-  width: 100px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   object-fit: contain;
-  pointer-events: none; /* Prevent the image from interfering with button clicks */
+}
+
+.typing-indicator {
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  background-color: transparent;
+  border: none;
+  color: #f3f4f6;
+  max-width: 85%;
 }
